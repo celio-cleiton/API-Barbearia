@@ -1,11 +1,11 @@
-# Projeto Barbearia API.
-# Autor:Célio Cleiton.
+# Projeto API Barbearia
 
-Este é o projeto api barbearia, o objetivo e poder cadastras os clientes e fazer agendamentos promover a conexão e interação entre as pessoas e as barbearias. Os usuários cadastrados no aplicativo podem criar e curtir publicações.
+## Autor: Célio Cleiton
 
-Neste projeto, além das bases de criação de APIs e banco de dados, iremos focar na implementação de segurança e códigos mais escaláveis. Durante o prazo de entrega, abordaremos diversos conceitos e formas de desenvolvimento, seguindo padrões de design e arquitetura. O seu desafio será unir as funcionalidades com as boas práticas de código.
+Este projeto é uma API para barbearias, com o objetivo de cadastrar clientes, agendar serviços e promover a interação entre as pessoas e os estabelecimentos. Os usuários cadastrados no aplicativo podem criar e curtir publicações relacionadas à barbearia.
+Neste projeto, além das bases de criação de APIs e banco de dados, iremos focar na implementação de segurança e códigos mais escaláveis, abordaremos diversos conceitos e formas de desenvolvimento, seguindo padrões de design e arquitetura.
 
-## Conteúdos abordados
+### Conteúdos abordados
 
 - NodeJS
 - Typescript
@@ -18,39 +18,41 @@ Neste projeto, além das bases de criação de APIs e banco de dados, iremos foc
 - Geração de hashes
 - Autenticação e autorização
 - Roteamento
-- Postman
-endpoints: Documentação do [Postman](https://documenter.getpostman.com/view/24823231/2s93mBxekC)
+- Postman (endpoints: Documentação do Postman)
 
 ## Banco de dados
 
-![projeto-api-barbearia (2)](https://user-images.githubusercontent.com/29845719/216036534-2b3dfb48-7782-411a-bffd-36245b78594e.png)
+!Diagrama do Banco de Dados
 
-Você pode visualizar o diagrama do banco de dados no seguinte link: [Diagrama do Banco de Dados](https://dbdiagram.io/d/63d16443296d97641d7c1ae1)
+Você pode visualizar o diagrama do banco de dados no link acima.
 
 ## Lista de requisitos
 
 - Documentação Postman de todos os endpoints (obrigatória para correção)
 
-- Endpoints
-    - [ ] signup
-    - [ ] login
-    - [ ] get posts
-    - [ ] create post
-    - [ ] edit post
-    - [ ] delete post
-    - [ ] like / dislike post
+### Endpoints
 
-- Autenticação e autorização
-    - [ ] identificação UUID
-    - [ ] senhas hasheadas com Bcrypt
-    - [ ] tokens JWT
- 
-- Código
-    - [ ] POO
-    - [ ] Arquitetura em camadas
-    - [ ] Roteadores no Express
+- `signup`: Cadastro de usuários (retorna um token JWT)
+- `login`: Login de usuários (retorna um token JWT)
 
-- README.md
+###   Funcionalidades a serem adicionadas.
+- `get posts`: Obtenção de publicações
+- `create post`: Criação de publicações
+- `edit post`: Edição de publicações
+- `delete post`: Exclusão de publicações
+- `like / dislike post`: Curtir ou descurtir publicações
+
+### Autenticação e autorização
+
+- Identificação UUID
+- Senhas hasheadas com Bcrypt
+- Tokens JWT
+
+### Código
+
+- Programação Orientada a Objetos (POO)
+- Arquitetura em camadas
+- Roteadores no Express
 
 ## Exemplos de requisição
 
@@ -90,131 +92,3 @@ As senhas dos usuários e primeiro nome seguido de 123.
   token: "um token jwt"
 }
 ```
-
-### Get posts
-Endpoint protegido, requer um token JWT para acessá-lo.
-
-```typescript
-// request GET /posts
-// headers.authorization = "token jwt"
-
-// response
-// status 200 OK
-[
-    {
-        "id": "uma uuid v4",
-        "content": "Hoje vou para a barbearia",
-        "likes": 2,
-        "dislikes": 1,
-        "createdAt": "2023-01-20T12:11:47:000Z",
-        "updatedAt": "2023-01-20T12:11:47:000Z",
-        "creator": {
-            "id": "uma uuid v4",
-            "name": "Fulano"
-        }
-    },
-    {
-        "id": "uma uuid v4",
-        "content": "kkkkkkkkkrying",
-        "likes": 0,
-        "dislikes": 0,
-        "createdAt": "2023-01-20T15:41:12:000Z",
-        "updatedAt": "2023-01-20T15:49:55:000Z",
-        "creator": {
-            "id": "uma uuid v4",
-            "name": "Ciclana"
-        }
-    }
-]
-```
-
-### Create post
-Endpoint protegido, requer um token JWT para acessá-lo.
-
-```typescript
-// request POST /posts
-// headers.authorization = "token jwt"
-// body JSON
-{
-    "content": "Partiu barbearia!"
-}
-
-// response
-// status 201 CREATED
-```
-
-### Edit post
-Endpoint protegido, requer um token JWT para acessá-lo. Apenas o criador do post pode editá-lo, e somente o conteúdo pode ser editado.
-
-```typescript
-// request PUT /posts/:id
-// headers.authorization = "token jwt"
-// body JSON
-{
-    "content": "Partiu barbearia lá no point de sempre!"
-}
-
-// response
-// status 200 OK
-```
-
-### Delete post
-Endpoint protegido, requer um token JWT para acessá-lo. Apenas o criador do post pode deletá-lo. Administradores podem deletar o post de qualquer pessoa.
-
-```typescript
-// request DELETE /posts/:id
-// headers.authorization = "token jwt"
-
-// response
-// status 200 OK
-```
-
-### Like or dislike post (o mesmo endpoint faz as duas ações)
-
-Endpoint protegido, requer um token JWT para acessá-lo. O criador do post não pode dar like ou dislike no próprio post. 
-
-Caso seja dado um like em um post que já tenha recebido like, o like é desfeito. Caso seja dado um dislike em um post que já tenha recebido dislike, o dislike é desfeito. 
-
-Caso seja dado um like em um post que já tenha recebido dislike, o like sobrescreve o dislike. Da mesma forma, caso seja dado um dislike em um post que já tenha recebido like, o dislike sobrescreve o like.
-
-#### Like (funcionalidade 1)
-
-```typescript
-// request PUT /posts/:id/like
-// headers.authorization = "token jwt"
-// body JSON
-{
-    "like": true
-}
-
-// response
-// status 200 OK
-```
-
-#### Dislike (funcionalidade 2)
-
-```typescript
-// request PUT /posts/:id/like
-// headers.authorization = "token jwt"
-// body JSON
-{
-    "like": false
-}
-
-// response
-// status 200 OK
-```
-
-#### Tabela likes_dislikes
-- No SQLite, lógicas booleanas devem ser controladas através de 0 e 1 (INTEGER).
-- Quando o campo "like" possuir o valor 1 na tabela, significa que a pessoa deu like no post.
-    - Na requisição, quando "like" é true.
-    
-- Quando o campo "like" possuir o valor 0 na tabela, significa que a pessoa deu dislike no post.
-    - Na requisição, quando "like" é false.
-    
-- Caso não exista um registro na tabela de relação, significa que a pessoa não deu like nem dislike.
-- Caso seja dado like em um
-
- post que já tenha recebido like, o like é removido (o item é deletado da tabela).
-- Caso seja dado dislike em um post que já tenha recebido dislike, o dislike é removido (o item é deletado da tabela).
